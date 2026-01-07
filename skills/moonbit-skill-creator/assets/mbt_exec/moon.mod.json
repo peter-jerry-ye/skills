@@ -1,0 +1,11 @@
+{
+  "name": "local/mbt_exec",
+  "deps": {
+    // for arguments and environments
+    "moonbitlang/x": "0.4.38",
+    // for async stdio and file operations
+    "moonbitlang/async": "0.16.0"
+  },
+  // execute on native target by default
+  "preferred-target": "native"
+}

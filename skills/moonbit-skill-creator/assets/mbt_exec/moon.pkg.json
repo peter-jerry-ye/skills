@@ -1,0 +1,9 @@
+{
+  // import packages to be used, with the last part the default alias
+  "import": [
+    "moonbitlang/async",
+    "moonbitlang/async/stdio"
+  ],
+  // This is an executable
+  "is-main": true
+}
