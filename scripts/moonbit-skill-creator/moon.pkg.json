@@ -1,0 +1,16 @@
+{
+  // import packages to be used, with the last part the default alias
+  "import": [
+    "peter-jerry-ye/wasi",
+    "peter-jerry-ye/parse_args",
+    "peter-jerry-ye/wasi/stdio",
+    "peter-jerry-ye/wasi/fs"
+  ],
+  // This is an executable
+  "is-main": true,
+  "link": {
+    "wasm": {
+      "export-memory-name": "memory"
+    }
+  }
+}

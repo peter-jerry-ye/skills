@@ -1,0 +1,8 @@
+{
+  "name": "local/mbt_exec",
+  "deps": {
+    "peter-jerry-ye/wasi": "0.24.2",
+    "peter-jerry-ye/parse_args": "0.1.1"
+  },
+  "preferred-target": "wasm"
+}
