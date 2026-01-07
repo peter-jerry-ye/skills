@@ -18,10 +18,18 @@ fn main {
           "Skill '\{skill_name}' initialized successfully.\n",
         )
       }
-      arg =>
+      [unknown_command, ..] =>
         @stdio.stdout.write_sync(
           (
-            $|Unknown command: \{arg}
+            $|Unknown command: \{unknown_command}
+            $|
+            $|\{helper_message}
+          ),
+        )
+      [] =>
+        @stdio.stdout.write_sync(
+          (
+            $|No command provided.
             $|
             $|\{helper_message}
           ),
