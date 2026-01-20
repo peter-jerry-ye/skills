@@ -14,11 +14,10 @@ Use Taskwarrior v3 as a lightweight, offline-capable issue tracker for agents. T
 1) Identify the current project and list available work
 - Use a consistent project naming convention based on the `origin` remote: `project:repo:<host>/<owner>/<repo>` (e.g., `project:repo:github.com/peter-jerry-ye/skills`)
 - If the repo has no remote yet, fall back to a home-relative path: `project:path:Documents/cakes/skills`
-- List available tasks: `task project:repo:github.com/peter-jerry-ye/skills +ready` (or `task project:repo:github.com/peter-jerry-ye/skills` if you do not use `+ready`)
+- List available tasks: `task project:repo:github.com/peter-jerry-ye/skills` (pending by default)
 
 2) Pick a task and claim it
-- `task <id> modify -ready +in-progress`
-- Optional: add owner/agent tag, e.g. `+agent-codex`
+- `task <id> modify +agent-codex`
 
 3) Plan the work before execution
 - Create dependency tasks instead of arrow plans.
@@ -30,12 +29,12 @@ Use Taskwarrior v3 as a lightweight, offline-capable issue tracker for agents. T
   - `task <id-step2> modify depends:<id-step1>`
 
 4) Create new tasks as needed
-- `task add project:repo:github.com/peter-jerry-ye/skills +ready "Fix parser crash"`
+- `task add project:repo:github.com/peter-jerry-ye/skills "Fix parser crash"`
 
 5) Work notes and updates
 - `task <id> annotate "Found reproduction case"`
 - `task <id> modify priority:H due:2025-01-15`
-- `task <id> modify status:blocked +blocked` (and annotate why)
+- If blocked, use dependencies (see "Blocked Work")
 
 6) Complete work
 - `task <id> done`
@@ -52,13 +51,14 @@ Use Taskwarrior v3 as a lightweight, offline-capable issue tracker for agents. T
 
 - Find work: `task project:repo:<host>/<owner>/<repo> +ready`
 - Show task details: `task <id> info`
-- Claim work: `task <id> modify -ready +in-progress +agent-<name>`
-- Update status: `task <id> modify +blocked` (or `task <id> modify -blocked +in-progress`)
-- Close work: `task <id> done`
+- Claim work: `task <id> modify +agent-<name>`
+- Blocked work: add dependencies and use `task blocked` / `task blocking` reports
+- Close work: `task <id> done` (completed)
 
 ## Conventions
 
-- **Status fields**: use a `status:` attribute (custom) plus tags `+ready`, `+in-progress`, `+blocked`, `+done` (or just rely on Taskwarrior's built-in pending/completed if you prefer).
+- **Statuses**: rely on Taskwarrior built-ins (`pending`, `waiting`, `completed`), avoid custom status tags.
+- **Blocked work**: represent blockers with `depends:` and query with `task blocked` / `task blocking`.
 - **Ownership**: encode agent identity in tags, e.g. `+agent-codex`, `+agent-alice`.
 - **Project scope**: use `project:repo:<host>/<owner>/<repo>` and fall back to `project:path:<home-relative>` when no remote exists.
 - **Linking**: include relevant file paths or IDs in annotations.
@@ -72,9 +72,9 @@ Use Taskwarrior v3 as a lightweight, offline-capable issue tracker for agents. T
 1. **File issues for remaining work** - Create tasks for anything that needs follow-up
    - `task add project:repo:<host>/<owner>/<repo> +ready "Follow-up: <short title>"`
 2. **Run quality gates** (if code changed) - Tests, linters, builds
-3. **Update issue status** - Close finished work, update in-progress items
+3. **Update issue status** - Close finished work, update blocked items
    - `task <id> done`
-   - `task <id> modify +in-progress` (or `+blocked` with an annotation)
+   - Add dependencies for blocked tasks and annotate the blocker
 4. **PUSH TO REMOTE** - This is MANDATORY:
    ```bash
    git pull --rebase
@@ -91,7 +91,15 @@ Use Taskwarrior v3 as a lightweight, offline-capable issue tracker for agents. T
 - NEVER say "ready to push when you are" - YOU must push
 - If push fails, resolve and retry until it succeeds
 
+## Blocked Work
+
+- Use dependencies instead of custom status tags.
+- Example:
+  - `task <id-blocked> modify depends:<id-blocker>`
+  - `task blocked` to list blocked tasks
+  - `task blocking` to list blocker tasks
+
 ## Work Until Finished
 
-- Keep working until all tasks you own are `done` or explicitly `+blocked` with a dependency task created.
+- Keep working until all tasks you own are `done` or have explicit dependencies with a blocker task created.
 - If a task depends on another, split it into a new task and block the current one with a clear annotation.
