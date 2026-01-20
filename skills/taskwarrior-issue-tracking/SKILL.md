@@ -27,6 +27,8 @@ Use Taskwarrior v3 as a lightweight, offline-capable issue tracker for agents. T
   - `task add project:repo:github.com/peter-jerry-ye/skills +ready "Step 3: sanity check"`
   - `task <id-step3> modify depends:<id-step2>`
   - `task <id-step2> modify depends:<id-step1>`
+- Include routine jobs as dependency tasks that block the final deliverable (e.g., lint/format/build/test).
+- Make the final deliverable depend on all routine jobs and prerequisite steps.
 
 4) Create new tasks as needed
 - `task add project:repo:github.com/peter-jerry-ye/skills "Fix parser crash"`
@@ -44,8 +46,8 @@ Use Taskwarrior v3 as a lightweight, offline-capable issue tracker for agents. T
 - Create follow-up tasks for deferred work instead of leaving comments in Git.
 
 8) Continue until all assigned tasks are finished
-- Do not stop while tasks you own remain `+in-progress` or unblocked.
-- If a task depends on another, split it: create a dependency task and mark the current one `+blocked`.
+- Do not stop while tasks you own are blocked by unmet dependencies.
+- When assigned a task, work through and complete its dependencies so it becomes unblocked, then complete the task itself.
 
 ## Command Mapping
 
