@@ -29,6 +29,11 @@ Use Taskwarrior v3 as a lightweight, offline-capable issue tracker for agents. T
   - `task <id-step2> modify depends:<id-step1>`
 - Include routine jobs as dependency tasks that block the final deliverable (e.g., lint/format/build/test).
 - Make the final deliverable depend on all routine jobs and prerequisite steps.
+- Example routine-job chain:
+  - `task add project:repo:github.com/peter-jerry-ye/skills "Run cargo fmt"`
+  - `task add project:repo:github.com/peter-jerry-ye/skills "Run cargo clippy"`
+  - `task add project:repo:github.com/peter-jerry-ye/skills "Implement feature X"`
+  - `task <id-feature> modify depends:<id-fmt>,<id-clippy>`
 
 4) Create new tasks as needed
 - `task add project:repo:github.com/peter-jerry-ye/skills "Fix parser crash"`
